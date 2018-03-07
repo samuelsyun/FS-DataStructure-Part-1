@@ -15,45 +15,59 @@ class LinkedList {
   }
 
   addToTail(value) {
-    let newNode = new Node(value, this.tail);
+    let oldTail = this.tail;
+    let newNode = new Node(value, oldTail);
 
-    if (this.tail) this.tail.next = newNode;
-    else this.head = newNode;
+    if (oldTail) {
+      oldTail.next = newNode;
+      newNode.previous = oldTail;
+    } else this.head = newNode;
 
     this.tail = newNode;
   }
 
   removeTail() {
-    if (!this.tail) return;
+    let removedTail = this.tail;
 
-    let removedValue = this.tail.value;
-    this.tail = this.tail.previous;
+    if (!removedTail) return;
 
-    if (this.tail) this.tail.next = null;
-    else this.head = null;
+    if (removedTail.previous) {
+      this.tail = removedTail.previous;
+      this.tail.next = null;
+    } else {
+      this.head = null;
+      this.tail = null;
+    }
 
-    return removedValue;
+    return removedTail.value;
   }
 
   addToHead(value) {
-    let newNode = new Node(value, null, this.head);
+    let oldHead = this.head;
+    let newNode = new Node(value, null, oldHead);
 
-    if (this.head) this.head.previous = newNode;
-    else this.tail = newNode;
+    if (oldHead) {
+      oldHead.previous = newNode;
+      newNode.next = oldHead;
+    } else this.tail = newNode;
 
     this.head = newNode;
   }
 
   removeHead() {
-    if (!this.head) return;
+    let removedHead = this.head;
 
-    let removedValue = this.head.value;
-    this.head = this.head.next;
+    if (!removedHead) return;
 
-    if (this.head) this.head.previous = null;
-    else this.tail = null;
+    if (removedHead.next) {
+      this.head = removedHead.next;
+      this.head.previous = null
+    } else {
+      this.tail = null;
+      this.head = null;
+    };
 
-    return removedValue;
+    return removedHead.value;
   }
 
   search(searchingItem) {
@@ -68,6 +82,18 @@ class LinkedList {
     }
 
     return null;
+  }
+
+  size () {
+    let counter = 0;
+    let currentNode = this.head;
+
+    while (currentNode) {
+      counter++;
+      currentNode = currentNode.next;
+    }
+
+    return counter;
   }
 }
 
